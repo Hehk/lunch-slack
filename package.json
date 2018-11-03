@@ -1,0 +1,23 @@
+{
+  "name": "nom_slack",
+  "version": "0.1.0",
+  "scripts": {
+    "build": "bsb -make-world",
+    "watch": "bsb -make-world -w",
+    "clean": "bsb -clean-world",
+    "start": "micro",
+    "dev": "micro-dev"
+  },
+  "keywords": [
+    "BuckleScript"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "bs-platform": "^4.0.7",
+    "micro-dev": "^3.0.0"
+  },
+  "dependencies": {
+    "micro": "^9.3.3"
+  }
+}
