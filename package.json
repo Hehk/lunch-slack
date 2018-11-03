@@ -6,7 +6,8 @@
     "watch": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "start": "micro",
-    "dev": "micro-dev"
+    "dev": "micro-dev",
+    "test": "ava"
   },
   "keywords": [
     "BuckleScript"
@@ -14,6 +15,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "ava": "^0.25.0",
     "bs-platform": "^4.0.7",
     "cz-conventional-changelog": "^2.1.0",
     "micro-dev": "^3.0.0"
@@ -25,5 +27,10 @@
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
+  },
+  "ava": {
+    "files": [
+      "lib/**/*_test.bs.js"
+    ]
   }
 }

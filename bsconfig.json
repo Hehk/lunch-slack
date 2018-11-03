@@ -1,10 +1,20 @@
 {
   "name": "nom_slack",
   "version": "0.1.0",
-  "sources": {
+  "sources": [{
     "dir" : "src",
     "subdirs" : true
   },
+  {
+    "dir": "bindings",
+    "subdirs": true
+  },
+  {
+    "dir": "tests",
+    "type": "dev",
+    "subdirs": true
+  }
+  ],
   "package-specs": {
     "module": "commonjs"
   },
