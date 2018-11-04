@@ -1,3 +1,5 @@
-Ava.test("foo", test => {
-  Ava.pass(test);
-})
+open Ava;
+
+test("foo", test => {
+  Test.pass(test);
+});
