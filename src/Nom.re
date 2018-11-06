@@ -1,8 +1,9 @@
 open Micro;
 
-let make = make(~handler=(req) => {
-  Js.Promise.make((~resolve, ~reject as _) => {
-    resolve(. String("Hello World"))
-  });
+let make = make(~handler=(~req, ~res) => {
+  switch (req.path) {
+  | ["slack", ..._] => Response.sendString(~res, "Hello World")
+  | _ => ();
+  }
 });
 

@@ -15,8 +15,10 @@ type request = {
 
 module Response = {
   type t;
-  [@bs.module "micro"] external sendString : (t, int, string) => unit = "send"; 
+  [@bs.module "micro"] external _sendString : (t, int, string) => unit = "send"; 
   [@bs.module "micro"] external sendJson : (t, int, Js.Json.t) => unit = "send"; 
+
+  let sendString = (~res, ~statusCode=200, content) => _sendString(res, statusCode, content);
 };
 module Request = {
   [@bs.deriving abstract]
@@ -77,33 +79,13 @@ module Request = {
 };
 
 
-type response =
-| String(string)
-| Json(Js.Json.t);
-
-let handleResponse = res => fun
-| String(str) => Response.sendString(res, 200, str)
-| Json(json) => Response.sendJson(res, 200, json);
-
-let makeSync = (~handler, req : Request.t, res : Response.t) => {
-  req
-  |> handler
-  |> handleResponse(res);
-};
-
 let make = (~handler, rawReq: Request.t, res : Response.t) => {
-  let request = {
+  let req = {
     path: Request.getPath(rawReq),
     meth: Request.getMethod(rawReq),
   };
 
-  request
-  |> handler
-  |> Js.Promise.then_(value => {
-    handleResponse(res, value);
-    Js.Promise.resolve();
-  })
-  |> ignore;
+  handler(~req, ~res) |> ignore;
 
   /* The returns of this function will be handled by micro unless
      it returns undefined */
