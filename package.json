@@ -2,12 +2,13 @@
   "name": "nom_slack",
   "version": "0.1.0",
   "scripts": {
-    "build": "bsb -make-world",
-    "watch": "bsb -make-world -w",
+    "build": "bsb -make-world && webpack --mode=production",
     "clean": "bsb -clean-world",
-    "start": "micro",
-    "dev": "micro-dev",
-    "test": "ava"
+    "start": "micro index.mjs",
+    "dev": "concurrently \"npm:compile-bs\" \"micro-dev\"",
+    "test": "ava",
+    "compile-js": "webpack --mode development",
+    "compile-bs": "bsb -make-world -w"
   },
   "keywords": [
     "BuckleScript"
@@ -17,8 +18,12 @@
   "devDependencies": {
     "ava": "^0.25.0",
     "bs-platform": "^4.0.7",
+    "concurrently": "^4.0.1",
     "cz-conventional-changelog": "^2.1.0",
-    "micro-dev": "^3.0.0"
+    "micro-dev": "^3.0.0",
+    "prettier": "^1.15.2",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.2"
   },
   "dependencies": {
     "@sentry/node": "^4.2.4",
