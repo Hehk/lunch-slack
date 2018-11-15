@@ -6,5 +6,4 @@ jobs:
       - checkout
       - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run: docker build -t hehk/nom_slack:$CIRCLE_BRANCH .
-      - run: docker push company/app:$CIRCLE_BRANCH
-
+      - run: docker push hehk/nom_slack:$CIRCLE_BRANCH
