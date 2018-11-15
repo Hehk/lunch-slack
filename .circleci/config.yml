@@ -4,7 +4,7 @@ jobs:
     machine: true
     steps:
       - checkout
-      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run: docker build -t hehk/nom_slack:$CIRCLE_BRANCH .
       - run: docker push company/app:$CIRCLE_BRANCH
 
