@@ -1,3 +1,4 @@
+// This file exists to add micro into the webpack build
 const micro = require("micro");
 const app = require("./app");
 
