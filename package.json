@@ -49,6 +49,10 @@
     "*.{js|json}": [
       "prettier",
       "git add"
+    ],
+    "*.{re|rei}": [
+      "refmt --in-place",
+      "git add" 
     ]
   }
 }
