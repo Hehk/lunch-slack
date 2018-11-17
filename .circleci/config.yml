@@ -4,6 +4,8 @@ jobs:
     machine: true
     steps:
       - checkout
+        # the echo $DOCKER_PASS is used to prevent having the pass as a config arg, which will cause it 
+        # to be logged
       - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run: docker build -t hehk/nom_slack:$CIRCLE_BRANCH .
       - run: docker push hehk/nom_slack:$CIRCLE_BRANCH
