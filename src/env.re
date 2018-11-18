@@ -1,12 +1,12 @@
-[%bs.raw {| require('dotenv').config() |}];
+Dotenv.config();
 
-[@bs.val] external getSentryUrl : Js.Nullable.t(string) = "process.env.SENTRY_URL";
-
-let sentryUrl = {
-  switch (getSentryUrl |> Js.Nullable.toOption) {
+let getEnv = (name) => {
+  switch (Node.Process.process##env |> Js.Dict.get(_, name)) {
   | None =>
-    Js.log("No sentry url set");
+    Js.log("Environment variable " ++ name ++ " not provided!");
     ""
   | Some(x) => x
   }
-};
+}
+
+let sentryUrl = getEnv("SENTRY_URL");
