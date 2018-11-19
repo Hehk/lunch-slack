@@ -2,6 +2,7 @@ version: 2
 jobs:
   build:
     machine: true
+    working_directory: /tmp
     steps:
       - checkout
         # the echo $DOCKER_PASS is used to prevent having the pass as a config arg, which will cause it 
@@ -9,8 +10,8 @@ jobs:
       - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run: docker build -t hehk/nom_slack:$CIRCLE_BRANCH .
       - run: docker push hehk/nom_slack:$CIRCLE_BRANCH
-      - run: mkdir -p /dist
-      - run: docker cp $(docker run -d hehk/nom_slack:$CIRCLE_BRANCH):/app/nom.js /dist/nom.js
+      - run: mkdir -p dist
+      - run: docker cp $(docker run -d hehk/nom_slack:$CIRCLE_BRANCH):/app/nom.js dist/nom.js
       - persist_to_workspace:
           root: dist
           # Must be relative path from root
@@ -19,11 +20,12 @@ jobs:
   deploy:
     docker:
       - image: circleci/node:8.10.0
+    working_directory: /tmp
     steps:
       - checkout
       - run: sudo npm install --global --unsafe-perm now
       - attach_workspace:
-          at: ./dist
+        at: /tmp/dist
       - run: now
 
 workflows:
