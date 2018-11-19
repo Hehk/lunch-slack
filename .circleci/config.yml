@@ -2,7 +2,6 @@ version: 2
 jobs:
   build:
     machine: true
-    working_directory: /tmp
     steps:
       - checkout
         # the echo $DOCKER_PASS is used to prevent having the pass as a config arg, which will cause it 
@@ -20,12 +19,11 @@ jobs:
   deploy:
     docker:
       - image: circleci/node:8.10.0
-    working_directory: /tmp
     steps:
       - checkout
       - run: sudo npm install --global --unsafe-perm now
       - attach_workspace:
-        at: /tmp/dist
+        at: dist
       - run: now
 
 workflows:
