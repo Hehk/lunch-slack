@@ -23,7 +23,7 @@ jobs:
       - checkout
       - run: sudo npm install --global --unsafe-perm now
       - attach_workspace:
-        at: dist
+          at: dist
       - run: now
 
 workflows:
