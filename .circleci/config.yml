@@ -15,7 +15,7 @@ jobs:
           root: dist
           # Must be relative path from root
           paths:
-            - /dist/nom.js
+            - nom.js
   deploy:
     docker:
       - image: circleci/node:8.10.0
