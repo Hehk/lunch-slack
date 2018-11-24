@@ -9,28 +9,9 @@ jobs:
       - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
       - run: docker build -t hehk/nom_slack:$CIRCLE_BRANCH .
       - run: docker push hehk/nom_slack:$CIRCLE_BRANCH
-      - run: mkdir -p dist
-      - run: docker cp $(docker run -d hehk/nom_slack:$CIRCLE_BRANCH):/app/nom.js dist/nom.js
-      - persist_to_workspace:
-          root: dist
-          # Must be relative path from root
-          paths:
-            - nom.js
-  deploy:
-    docker:
-      - image: circleci/node:8.10.0
-    steps:
-      - checkout
-      - run: sudo npm install --global --unsafe-perm now
-      - attach_workspace:
-          at: dist
-      - run: now --token $NOW_TOKEN 
 
 workflows:
   version: 2
-  build_deploy:
+  build:
     jobs:
       - build
-      - deploy:
-          requires:
-            - build

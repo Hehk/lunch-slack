@@ -1,0 +1,23 @@
+{
+  "apiVersion": "v1",
+  "kind": "Pod",
+  "metadata": {
+    "name": "nom-slack",
+    "labels": {
+      "name": "nom-slack"
+    }
+  },
+  "spec": {
+    "containers": [
+      {
+        "name": "nom-slack",
+        "image": "hehk/nom_slack",
+        "ports": [
+          {
+            "containerPort": 3000
+          }
+        ]
+      }
+    ]
+  }
+}
