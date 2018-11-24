@@ -1,10 +1,10 @@
 {
-  "name": "nom_slack",
+  "name": "lunch-slack",
   "version": "0.1.0",
   "scripts": {
     "build": "bsb -make-world && webpack --mode production",
     "clean": "bsb -clean-world && rm -rf dist",
-    "start": "node dist/nom.js",
+    "start": "node dist/slack.js",
     "dev": "micro-dev src/app.js",
     "bsb": "bsb -make-world -w",
     "test": "ava"

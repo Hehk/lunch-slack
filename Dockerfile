@@ -13,7 +13,7 @@ RUN npm run build
 
 
 FROM gcr.io/distroless/nodejs
-COPY --from=build /app/dist/nom.js /app/nom.js
+COPY --from=build /app/dist/slack.js /app/slack.js
 WORKDIR /app
 EXPOSE 3000
-CMD ["nom.js"]
+CMD ["slack.js"]

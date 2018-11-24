@@ -5,7 +5,7 @@ module.exports = {
   target: "node",
   entry: path.resolve(__dirname, "./src/entry.js"),
   output: {
-    filename: "nom.js",
+    filename: "slack.js",
     path: path.resolve(__dirname, "./dist"),
   },
 };
