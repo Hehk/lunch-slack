@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: slack-deployment
+  labels:
+    app: slack
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: slack
+  template:
+    metadata:
+      labels:
+        app: slack
+        tier: web
+    spec:
+      containers:
+      - name: slack
+        image: hehk/lunch-slack:master
+        ports:
+          - containerPort: 3000

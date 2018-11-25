@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: slack-service
+  labels:
+    app: slack
+spec:
+  selector:
+    app: slack
+    tier: web
+  ports:
+  - port: 80
+    targetPort: 3000
+  type: LoadBalancer
+  loadBalancerIP: "35.232.243.44"
