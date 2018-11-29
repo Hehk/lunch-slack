@@ -8,17 +8,14 @@ type meth =
   | Options
   | Invalid;
 
-type request = {
-  path: list(string),
-  meth: meth
-};
 
 module Response = {
   type t;
   [@bs.module "micro"] external _sendString : (t, int, string) => unit = "send"; 
-  [@bs.module "micro"] external sendJson : (t, int, Js.Json.t) => unit = "send"; 
+  [@bs.module "micro"] external _sendJson : (t, int, Js.Json.t) => unit = "send"; 
 
   let sendString = (~res, ~statusCode=200, content) => _sendString(res, statusCode, content);
+  let sendJson = (~res, ~statusCode=200, content) => _sendJson(res, statusCode, content);
 };
 module Request = {
   [@bs.deriving abstract]
@@ -26,6 +23,7 @@ module Request = {
     [@bs.optional] url: string,
     [@bs.optional] [@bs.as "method"] meth: string,
   };
+  [@bs.send] external on : (t, string, 'a => unit) => t = "on";
   [@bs.deriving abstract]
   type options = {
     limit: Js.Nullable.t(string),
@@ -76,13 +74,27 @@ module Request = {
       }
     }
   };
+
+  [@bs.deriving abstract]
+  type bodyOpts = {
+    [@bs.optional] limit: string,
+    [@bs.optional] encoding: string,
+  };
+  [@bs.module "micro"] external json : (t) => Js.Promise.t(Js.Json.t) = "";
+  [@bs.module "micro"] external text : (t) => Js.Promise.t(string) = "";
 };
 
+type request = {
+  path: list(string),
+  meth: meth,
+  raw: Request.t,
+};
 
 let make = (~handler, rawReq: Request.t, res : Response.t) => {
   let req = {
     path: Request.getPath(rawReq),
     meth: Request.getMethod(rawReq),
+    raw: rawReq
   };
 
   handler(~req, ~res) |> ignore;

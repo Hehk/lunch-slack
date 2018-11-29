@@ -18,6 +18,8 @@ spec:
       containers:
       - name: slack
         image: hehk/lunch-slack:master
+        # Stop gap until I setup docker versioning
+        imagePullPolicy: Always
         ports:
           - containerPort: 3000
         livenessProbe:
