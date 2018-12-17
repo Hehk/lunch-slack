@@ -7,8 +7,10 @@
       "subdirs": true
     },
     {
-      "dir": "bindings",
-      "subdirs": true
+      "dir": "bindings"
+    },
+    {
+      "dir": "json"
     },
     {
       "dir": "tests",
@@ -20,7 +22,9 @@
     "module": "commonjs"
   },
   "suffix": ".bs.js",
-  "bs-dependencies": [],
+  "bs-dependencies": [
+    "@ahrefs/bs-atdgen-codec-runtime"
+  ],
   "warnings": {
     "error": "+101"
   },

@@ -7,3 +7,7 @@ npm-debug.log
 
 .env
 /dist
+
+/json/*.ml
+/json/*.mli
+/_opam

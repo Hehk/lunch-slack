@@ -7,7 +7,8 @@
     "start": "node dist/slack.js",
     "dev": "micro-dev src/app.js",
     "bsb": "bsb -make-world -w",
-    "test": "ava"
+    "test": "ava",
+    "atdgen": "atdgen -t meetup.atd && atdgen -bs meetup.atd"
   },
   "keywords": [
     "BuckleScript"
@@ -26,6 +27,7 @@
     "webpack-cli": "^3.1.2"
   },
   "dependencies": {
+    "@ahrefs/bs-atdgen-codec-runtime": "^1.1.0",
     "@sentry/node": "^4.2.4",
     "dotenv": "^6.1.0",
     "micro": "^9.3.3"
@@ -52,7 +54,7 @@
     ],
     "*.{re|rei}": [
       "refmt --in-place",
-      "git add" 
+      "git add"
     ]
   }
 }

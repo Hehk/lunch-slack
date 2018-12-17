@@ -14,8 +14,8 @@ module Response = {
   [@bs.module "micro"] external _sendString : (t, int, string) => unit = "send"; 
   [@bs.module "micro"] external _sendJson : (t, int, Js.Json.t) => unit = "send"; 
 
-  let sendString = (~res, ~statusCode=200, content) => _sendString(res, statusCode, content);
-  let sendJson = (~res, ~statusCode=200, content) => _sendJson(res, statusCode, content);
+  let sendString = (~res, ~statusCode=200, message) => _sendString(res, statusCode, message);
+  let sendJson = (~res, ~statusCode=200, ~message) => _sendJson(res, statusCode, message);
 };
 module Request = {
   [@bs.deriving abstract]
