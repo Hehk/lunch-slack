@@ -1,0 +1,14 @@
+type searchParams = {
+  term: string;
+  ?location: string option;
+  ?latitude: float option;
+  ?longitude: float option;
+  ?radius: int option;
+  ?categories: string option;
+  limit: int;
+  ?open_now: bool option;
+}
+
+type searchResponse = {
+  total: int;
+}

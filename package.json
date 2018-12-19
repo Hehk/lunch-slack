@@ -8,7 +8,7 @@
     "dev": "micro-dev src/app.js",
     "bsb": "bsb -make-world -w",
     "test": "ava",
-    "atdgen": "atdgen -t meetup.atd && atdgen -bs meetup.atd"
+    "atdgen": "atdgen -t json/*.atd && atdgen -bs json/*.atd"
   },
   "keywords": [
     "BuckleScript"
@@ -29,7 +29,9 @@
   "dependencies": {
     "@ahrefs/bs-atdgen-codec-runtime": "^1.1.0",
     "@sentry/node": "^4.2.4",
+    "bs-fetch": "^0.3.1",
     "dotenv": "^6.1.0",
+    "isomorphic-fetch": "^2.2.1",
     "micro": "^9.3.3"
   },
   "config": {

@@ -23,7 +23,8 @@
   },
   "suffix": ".bs.js",
   "bs-dependencies": [
-    "@ahrefs/bs-atdgen-codec-runtime"
+    "@ahrefs/bs-atdgen-codec-runtime",
+    "bs-fetch"
   ],
   "warnings": {
     "error": "+101"
