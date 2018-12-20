@@ -6,3 +6,5 @@ let (>>) = compose;
 let ignoreResolve = (_) => {
   Js.Promise.resolve(());
 };
+
+let some = x => Some(x);

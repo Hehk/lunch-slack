@@ -9,6 +9,31 @@ type searchParams = {
   ?open_now: bool option;
 }
 
+type location = {
+  address1: string nullable;
+  address2: string nullable;
+  address3: string nullable;
+  city: string;
+  country: string;
+  display_address: string list;
+  state: string;
+  zip_code: string;
+}
+
+type business = {
+  id: string;
+  alias: string;
+  image_url: string;
+  is_closed: bool;
+  location: location;
+  name: string;
+  phone: string;
+  display_phone: string;
+  rating: float;
+  review_count: int;
+}
+
 type searchResponse = {
   total: int;
+  businesses: business list;
 }

@@ -10,3 +10,4 @@ let getEnv = (name) => {
 }
 
 let sentryUrl = getEnv("SENTRY_URL");
+let yelpApiKey = getEnv("YELP_API_KEY");
