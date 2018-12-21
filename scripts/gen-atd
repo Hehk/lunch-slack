@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+set -eu -o pipefail
+
+for file in json/*.atd; do
+  if [[ -f $file ]]; then
+    opam exec -- atdgen -t $file
+    opam exec -- atdgen -bs $file
+  fi
+done
