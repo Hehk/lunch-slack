@@ -33,7 +33,8 @@
     "bs-json": "^1.0.1",
     "dotenv": "^6.1.0",
     "isomorphic-fetch": "^2.2.1",
-    "micro": "^9.3.3"
+    "micro": "^9.3.3",
+    "reason-future": "^2.3.1"
   },
   "config": {
     "commitizen": {

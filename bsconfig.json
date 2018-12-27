@@ -25,7 +25,8 @@
   "bs-dependencies": [
     "@glennsl/bs-json",
     "@ahrefs/bs-atdgen-codec-runtime",
-    "bs-fetch"
+    "bs-fetch",
+    "reason-future"
   ],
   "warnings": {
     "error": "+101"

@@ -1,5 +1,6 @@
 open Atdgen_codec_runtime;
 open Utils;
+open Belt.Result;
 
 let headers =
   Fetch.HeadersInit.make({
@@ -9,11 +10,8 @@ let headers =
 
 let decode = (decoder, json) =>
   switch (Decode.decode(decoder, json)) {
-  | x => Some(x)
-  | exception (Json_decode.DecodeError(msg)) =>
-    Sentry.captureMessage(msg);
-    Js.log("Decoding Error: \n" ++ msg);
-    None;
+  | x => Ok(x)
+  | exception (Json_decode.DecodeError(msg)) => Error("Decoding Error" ++ msg)
   };
 
 let search = query => {
@@ -33,13 +31,13 @@ let search = query => {
       },
     )
     |> Querystring.stringify;
-
-  Js.Promise.(
+  let response =
     Fetch.fetchWithInit(
       endpoint ++ "?" ++ queryString,
       Fetch.RequestInit.make(~headers, ()),
-    )
-    |> then_(Fetch.Response.json)
-    |> then_(resolve >> decode(YelpJson_bs.read_searchResponse))
-  );
+    );
+
+  Js.Promise.then_(Fetch.Response.json, response)
+  ->FutureJs.fromPromise(Js.String.make)
+  ->Future.map(YelpJson_bs.read_searchResponse |> decode |> Result.onOk);
 };
