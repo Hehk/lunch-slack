@@ -1,5 +1,4 @@
 open Utils;
-open Micro;
 open Result;
 
 /* TODO add smarter selection so the same does not come up every time */
@@ -15,7 +14,7 @@ let createMessage = ({name}: YelpJson_bs.business): SlackJson_bs.message => {
   attachments: [],
 };
 
-let handleRequest = (~res, queryString) => {
+let handleRequest = queryString => {
   open Atdgen_codec_runtime;
 
   let command =
@@ -28,18 +27,16 @@ let handleRequest = (~res, queryString) => {
   ->Future.map(getRestaurant |> onOk)
   ->Future.mapOk(createMessage)
   ->Future.mapOk(Encode.encode(SlackJson_bs.write_message))
-  ->Future.tap(
-      fun
-      | Ok(json) => Response.sendJson(~res, json)
-      | Error(msg) => Js.log("ERROR: " ++ msg),
-    );
+  ->Future.mapOk(x => Http.Json(x));
 };
 
-let handler = (~req, ~res) =>
-  req.raw
-  ->Request.text
+let handler = (request: Http.request) => {
+  let text = request.text();
+
+  text
   ->Future.flatMap(
       fun
-      | Ok(x) => handleRequest(~res, x)
+      | Ok(x) => handleRequest(x)
       | Error(msg) => Future.value(Error(msg)),
     );
+};

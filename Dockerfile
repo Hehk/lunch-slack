@@ -5,6 +5,7 @@ RUN opam pin add atdgen --dev-repo
 
 WORKDIR /app
 COPY . .
+# Using the nuclear option because of multistage build
 RUN sudo chmod -R 777 /app
 RUN scripts/gen-atd
 

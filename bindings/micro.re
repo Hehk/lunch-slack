@@ -1,13 +1,3 @@
-type meth =
-  | Get
-  | Post
-  | Put
-  | Patch
-  | Delete
-  | Head
-  | Options
-  | Invalid;
-
 module Response = {
   type t;
   [@bs.module "micro"] external _sendString: (t, int, string) => unit = "send";
@@ -65,7 +55,7 @@ module Request = {
       raw |> Js.String.split("/") |> Array.to_list;
     };
 
-  let getMethod = req =>
+  let getMethod = req: Http.meth =>
     switch (req |> methGet) {
     | None => Invalid
     | Some(meth) =>
@@ -91,19 +81,7 @@ module Request = {
   [@bs.module "micro"] external json: t => Js.Promise.t(Js.Json.t) = "";
 };
 
-type request = {
-  path: list(string),
-  meth,
-  raw: Request.t,
-};
-
-let make = (~handler, rawReq: Request.t, res: Response.t) => {
-  let req = {
-    path: Request.getPath(rawReq),
-    meth: Request.getMethod(rawReq),
-    raw: rawReq,
-  };
-
+let make = (~handler, req: Request.t, res: Response.t) => {
   handler(~req, ~res) |> ignore;
 
   /* The returns of this function will be handled by micro unless
