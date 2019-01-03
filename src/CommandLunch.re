@@ -1,12 +1,21 @@
 open Utils;
-open Result;
 
-/* TODO add smarter selection so the same does not come up every time */
-let getRestaurant = (businesses: list(YelpJson_bs.business)) =>
+let getRestaurant = (businesses: list(YelpJson_bs.business)) => {
+  let msg = "No restaurant found";
   switch (businesses) {
-  | [] => Error("No restaurant found")
-  | [hd, ..._] => Ok(hd)
+  | [] => Result.Error(msg)
+  | _ =>
+    businesses
+    |> List.length
+    |> Js.Math.random_int(0)
+    |> Belt.List.get(businesses)
+    |> (
+      fun
+      | None => Result.Error(msg)
+      | Some(x) => Result.Ok(x)
+    )
   };
+};
 
 let createMessage = ({name}: YelpJson_bs.business): SlackJson_bs.message => {
   text: name,
@@ -24,7 +33,7 @@ let handleRequest = queryString => {
 
   Yelp.search(command.text)
   ->Future.mapOk(x => x.businesses)
-  ->Future.map(getRestaurant |> onOk)
+  ->Future.map(getRestaurant |> Result.onOk)
   ->Future.mapOk(createMessage)
   ->Future.mapOk(Encode.encode(SlackJson_bs.write_message))
   ->Future.mapOk(x => Http.Json(x));
@@ -37,6 +46,6 @@ let handler = (request: Http.request) => {
   ->Future.flatMap(
       fun
       | Ok(x) => handleRequest(x)
-      | Error(msg) => Future.value(Error(msg)),
+      | Error(msg) => Future.value(Result.Error(msg)),
     );
 };
