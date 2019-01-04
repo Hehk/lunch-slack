@@ -1,9 +1,9 @@
 open Utils;
 
 let getRestaurant = (businesses: list(YelpJson_bs.business)) => {
-  let msg = "No restaurant found";
+  let errorMsg = Result.Error("No restaurant found");
   switch (businesses) {
-  | [] => Result.Error(msg)
+  | [] => errorMsg
   | _ =>
     businesses
     |> List.length
@@ -11,8 +11,8 @@ let getRestaurant = (businesses: list(YelpJson_bs.business)) => {
     |> Belt.List.get(businesses)
     |> (
       fun
-      | None => Result.Error(msg)
-      | Some(x) => Result.Ok(x)
+      | None => errorMsg
+      | Some(x) => Ok(x)
     )
   };
 };
