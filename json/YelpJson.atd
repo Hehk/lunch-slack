@@ -24,6 +24,7 @@ type business = {
   id: string;
   alias: string;
   image_url: string;
+  url: string option;
   is_closed: bool;
   location: location;
   name: string;

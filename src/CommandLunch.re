@@ -17,10 +17,23 @@ let getRestaurant = (businesses: list(YelpJson_bs.business)) => {
   };
 };
 
-let createMessage = ({name}: YelpJson_bs.business): SlackJson_bs.message => {
-  text: name,
-  response_type: Some("in_channel"),
-  attachments: [],
+let createMessage =
+    ({name, location, url}: YelpJson_bs.business): SlackJson_bs.message => {
+  let address =
+    location.display_address
+    |> (
+      fun
+      | [] => "None found"
+      | [hd, ...tl] => Belt.List.reduce(tl, hd, (acc, s) => acc ++ ", " ++ s)
+    );
+
+  {
+    text: "Restaurant",
+    response_type: Some("in_channel"),
+    attachments: [
+      {title: Some(name), title_link: url, text: "Address: " ++ address},
+    ],
+  };
 };
 
 let handleRequest = queryString => {

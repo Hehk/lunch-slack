@@ -12,8 +12,19 @@ type command = {
   trigger_id:   string;
 }
 
+type attachment = {
+  text: string;
+  title: string option;
+  title_link: string option;
+  (* 
+  fallback: string option;
+  pretext: string option;
+  color: string option;
+  *)
+}
+
 type message = {
   text: string;
   ?response_type: string option;
-  ~attachments:   message list;
+  ~attachments: attachment list;
 }

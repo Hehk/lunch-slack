@@ -8,7 +8,7 @@
     "dev": "micro-dev src/app.js",
     "bsb": "bsb -make-world -w",
     "test": "ava",
-    "atdgen": "gen-atd"
+    "atdgen": "scripts/gen-atd"
   },
   "keywords": [
     "BuckleScript"
