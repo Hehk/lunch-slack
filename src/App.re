@@ -2,6 +2,13 @@ open Micro;
 
 Sentry.init(~dsn=Env.sentryUrl);
 
+Firebase.config(
+  ~apiKey=Env.firebaseApiKey,
+  ~databaseURL=Env.firebaseDatabaseUrl,
+  (),
+)
+|> Firebase.initializeApp;
+
 let stringResponse = s => s->Http.String->Belt.Result.Ok->Future.value;
 
 let make =
