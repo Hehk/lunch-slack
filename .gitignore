@@ -11,3 +11,5 @@ npm-debug.log
 /json/*.ml
 /json/*.mli
 /_opam
+
+graphql_schema.json

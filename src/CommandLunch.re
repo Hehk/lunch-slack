@@ -1,5 +1,19 @@
 open Utils;
 
+module SaveUserMutation = [%graphql
+  {|
+  mutation createNewUser($name: String!, $slackId: String!) {
+    createUser(data: {
+    name: $name,
+    slackId: $slackId,
+    orders: []
+    }) {
+      id
+    }
+  }
+|}
+];
+
 let getRestaurant = (businesses: list(YelpJson_bs.business)) => {
   let errorMsg = Result.Error("No restaurant found");
   switch (businesses) {

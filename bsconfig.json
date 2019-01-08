@@ -28,6 +28,9 @@
     "bs-fetch",
     "reason-future"
   ],
+  "ppx-flags": [
+    "graphql_ppx/ppx"
+  ],
   "warnings": {
     "error": "+101"
   },

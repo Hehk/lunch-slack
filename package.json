@@ -8,7 +8,8 @@
     "dev": "micro-dev src/app.js",
     "bsb": "bsb -make-world -w",
     "test": "ava",
-    "atdgen": "scripts/gen-atd"
+    "atdgen": "scripts/gen-atd",
+    "get-graphql-schema": "get-graphql-schema http://localhost:4466 --json > graphql_schema.json"
   },
   "keywords": [
     "BuckleScript"
@@ -19,6 +20,8 @@
     "ava": "^0.25.0",
     "bs-platform": "^4.0.7",
     "cz-conventional-changelog": "^2.1.0",
+    "get-graphql-schema": "^2.1.2",
+    "graphql_ppx": "^0.2.8",
     "husky": "^1.1.4",
     "lint-staged": "^8.0.5",
     "micro-dev": "^3.0.0",
@@ -32,7 +35,6 @@
     "bs-fetch": "^0.3.1",
     "bs-json": "^1.0.1",
     "dotenv": "^6.1.0",
-    "firebase": "^5.7.2",
     "isomorphic-fetch": "^2.2.1",
     "micro": "^9.3.3",
     "reason-future": "^2.3.1"
