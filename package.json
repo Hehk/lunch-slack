@@ -9,7 +9,7 @@
     "bsb": "bsb -make-world -w",
     "test": "ava",
     "atdgen": "scripts/gen-atd",
-    "get-graphql-schema": "get-graphql-schema http://localhost:4466 --json > graphql_schema.json"
+    "send-introspection-query": "send-introspection-query http://localhost:4466"
   },
   "keywords": [
     "BuckleScript"

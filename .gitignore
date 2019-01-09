@@ -13,3 +13,4 @@ npm-debug.log
 /_opam
 
 graphql_schema.json
+.graphql_ppx_cache
