@@ -5,7 +5,7 @@ let handleResponseStatus = res =>
     Result.Ok(res) :
     Result.Error("Request failed: " ++ Fetch.Response.statusText(res));
 
-let sendQuery = query => {
+let query = query => {
   open Fetch;
 
   let body =
@@ -33,5 +33,24 @@ let sendQuery = query => {
   ->Future.flatMapOk(res =>
       res->Response.json->FutureJs.fromPromise(Js.String.make)
     )
-  ->Future.mapOk(query##parse);
+  ->Future.map(
+      Result.onOk(res =>
+        switch (Js.Json.decodeObject(res)) {
+        | Some(obj) =>
+          switch (Js.Dict.get(obj, "data")) {
+          | Some(x) => Ok(x |> query##parse)
+          | None =>
+            Error(
+              "Graphql request failed, response is malformed"
+              ++ Js.Json.stringify(res),
+            )
+          }
+        | None =>
+          Error(
+            "Graphql request failed: response is not an object\n"
+            ++ Js.Json.stringify(res),
+          )
+        }
+      ),
+    );
 };

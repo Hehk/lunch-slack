@@ -2,11 +2,48 @@ open Utils;
 
 module SaveUserMutation = [%graphql
   {|
-  mutation createNewUser($name: String!, $slackId: String!) {
-    createUser(data: {
-    name: $name,
-    slackId: $slackId,
-    orders: []
+  mutation upsertUser($slackId: ID!, $name: String!) {
+    upsertUser(
+      where: {
+        slackId: $slackId
+      },
+      create:{
+        name: $name,
+        slackId: $slackId
+      },
+      update:{
+        name:$name
+      }
+    ) {
+      id
+    }
+  }
+|}
+];
+
+module SaveCommandMutation = [%graphql
+  {|
+  mutation createCommand(
+    $teamId: String!,
+    $teamDomain: String!,
+    $channelId: String!,
+    $channelName: String!,
+    $command: String!,
+    $text: String!,
+    $userSlackId: String!
+  ) {
+    createCommand(data:{
+      teamId: $teamId,
+      teamDomain: $teamDomain,
+      channelId: $channelId,
+      channelName: $channelName,
+      command: $command,
+      text: $text,
+      user: {
+        connect: {
+          slackId: $userSlackId
+        }
+      }
     }) {
       id
     }
