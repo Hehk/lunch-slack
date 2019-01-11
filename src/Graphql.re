@@ -9,17 +9,19 @@ let query = query => {
   open Fetch;
 
   let body =
-    Js.Dict.fromList([
+    [
       ("query", Js.Json.string(query##query)),
       ("variables", query##variables),
-    ])
+    ]
+    |> Js.Dict.fromList
     |> Js.Json.object_
     |> Js.Json.stringify
     |> Fetch.BodyInit.make;
+
   let headers =
-    Fetch.HeadersInit.makeWithArray([|
-      ("content-type", "application/json"),
-    |]);
+    [("Content-Type", "application/json")]
+    |> Js.Dict.fromList
+    |> Fetch.HeadersInit.makeWithDict;
 
   let response =
     Fetch.fetchWithInit(
@@ -34,7 +36,8 @@ let query = query => {
       res->Response.json->FutureJs.fromPromise(Js.String.make)
     )
   ->Future.map(
-      Result.onOk(res =>
+      Result.onOk(res => {
+        Js.log(res);
         switch (Js.Json.decodeObject(res)) {
         | Some(obj) =>
           switch (Js.Dict.get(obj, "data")) {
@@ -50,7 +53,7 @@ let query = query => {
             "Graphql request failed: response is not an object\n"
             ++ Js.Json.stringify(res),
           )
-        }
-      ),
+        };
+      }),
     );
 };

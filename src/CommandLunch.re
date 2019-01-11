@@ -1,26 +1,5 @@
 open Utils;
 
-module SaveUserMutation = [%graphql
-  {|
-  mutation upsertUser($slackId: ID!, $name: String!) {
-    upsertUser(
-      where: {
-        slackId: $slackId
-      },
-      create:{
-        name: $name,
-        slackId: $slackId
-      },
-      update:{
-        name:$name
-      }
-    ) {
-      id
-    }
-  }
-|}
-];
-
 module SaveCommandMutation = [%graphql
   {|
   mutation createCommand(
@@ -30,7 +9,7 @@ module SaveCommandMutation = [%graphql
     $channelName: String!,
     $command: String!,
     $text: String!,
-    $userSlackId: String!
+    $userSlackId: ID!,
   ) {
     createCommand(data:{
       teamId: $teamId,
@@ -87,6 +66,21 @@ let createMessage =
   };
 };
 
+let saveCommand = (command: SlackJson_bs.command) =>
+  SaveCommandMutation.make(
+    ~teamId=command.team_id,
+    ~teamDomain=command.team_domain,
+    ~channelId=command.channel_id,
+    ~channelName=command.channel_name,
+    ~command=command.command,
+    ~text=command.text,
+    ~userSlackId=command.user_id,
+    (),
+  )
+  ->Graphql.query
+  ->Future.tap(Js.log2("Response"))
+  ->ignore;
+
 let handleRequest = queryString => {
   open Atdgen_codec_runtime;
 
@@ -94,6 +88,8 @@ let handleRequest = queryString => {
     queryString
     |> Querystring.parse
     |> Decode.decode(SlackJson_bs.read_command);
+
+  saveCommand(command);
 
   Yelp.search(command.text)
   ->Future.mapOk(x => x.businesses)
