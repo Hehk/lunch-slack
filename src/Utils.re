@@ -33,3 +33,4 @@ module Result = {
     | Error(x) => f(x)
     | Ok(x) => Ok(x);
 };
+

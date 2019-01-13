@@ -37,7 +37,6 @@ let query = query => {
     )
   ->Future.map(
       Result.onOk(res => {
-        Js.log(res);
         switch (Js.Json.decodeObject(res)) {
         | Some(obj) =>
           switch (Js.Dict.get(obj, "data")) {

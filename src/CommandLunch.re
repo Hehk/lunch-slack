@@ -9,7 +9,7 @@ module SaveCommandMutation = [%graphql
     $channelName: String!,
     $command: String!,
     $text: String!,
-    $userSlackId: ID!,
+    $userId: ID!,
   ) {
     createCommand(data:{
       teamId: $teamId,
@@ -20,10 +20,31 @@ module SaveCommandMutation = [%graphql
       text: $text,
       user: {
         connect: {
-          slackId: $userSlackId
+          id: $userId
         }
       }
     }) {
+      id
+    }
+  }
+|}
+];
+
+module SaveUser = [%graphql
+  {|
+  mutation upsertUser($slackId: ID!, $name: String!) {
+    upsertUser(
+      where: {
+        slackId: $slackId
+      },
+      create:{
+        name: $name,
+        slackId: $slackId
+      },
+      update:{
+        name:$name
+      }
+    ) {
       id
     }
   }
@@ -66,7 +87,15 @@ let createMessage =
   };
 };
 
-let saveCommand = (command: SlackJson_bs.command) =>
+let saveUser = (command: SlackJson_bs.command) => {
+  let response =
+    SaveUser.make(~slackId=command.user_id, ~name=command.user_name, ())
+    ->Graphql.query;
+
+  response->Future.mapOk(x => x##upsertUser##id);
+};
+
+let saveCommand = (command: SlackJson_bs.command, userId) =>
   SaveCommandMutation.make(
     ~teamId=command.team_id,
     ~teamDomain=command.team_domain,
@@ -74,12 +103,10 @@ let saveCommand = (command: SlackJson_bs.command) =>
     ~channelName=command.channel_name,
     ~command=command.command,
     ~text=command.text,
-    ~userSlackId=command.user_id,
+    ~userId,
     (),
   )
-  ->Graphql.query
-  ->Future.tap(Js.log2("Response"))
-  ->ignore;
+  ->Graphql.query;
 
 let handleRequest = queryString => {
   open Atdgen_codec_runtime;
@@ -89,7 +116,10 @@ let handleRequest = queryString => {
     |> Querystring.parse
     |> Decode.decode(SlackJson_bs.read_command);
 
-  saveCommand(command);
+  command
+  ->saveUser
+  ->Future.flatMapOk(saveCommand(command))
+  ->ignore;
 
   Yelp.search(command.text)
   ->Future.mapOk(x => x.businesses)
